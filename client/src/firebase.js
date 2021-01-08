@@ -1,7 +1,8 @@
-import * as firebase from "firebase";
+import firebase from "firebase";
+import "firebase/auth";
 
 // Your web app's Firebase configuration
-const firebaseConfig = {
+const config = {
   apiKey: "AIzaSyC8SF24qNPzE4hL6YpSVuo5oG6DZKGwpB0",
   authDomain: "ecommerce-5262b.firebaseapp.com",
   projectId: "ecommerce-5262b",
@@ -10,7 +11,9 @@ const firebaseConfig = {
   appId: "1:389434449302:web:3c0c9beebb5580269951b7",
 };
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+if (!firebase.apps.length) {
+  firebase.initializeApp(config);
+}
 
 // export
 export const auth = firebase.auth();
