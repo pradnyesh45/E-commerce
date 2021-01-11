@@ -6,21 +6,34 @@ const RegisterComplete = ({ history }) => {
   const [email, setEmail] = useState("");
   const { password, setPassword } = useState("");
 
-  useState(() => {}, []);
+  useEffect(() => {
+    setEmail(window.localStorage.getItem("emailForRegistration"));
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
+      const result = await auth.signInWithEmailLink(
+        email,
+        window.location.href
+      );
+    } catch (error) {}
   };
 
   const completeRegistrationForm = () => (
     <form onSubmit={handleSubmit}>
+      <input type="email" className="form-control" value={email} disabled />
+
       <input
-        type="email"
+        type="password"
         className="form-control"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="Password"
         autoFocus
       />
+
+      <br />
 
       <button type="submit" className="btn btn-raised">
         Complete Registration
