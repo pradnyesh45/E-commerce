@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 
 const RegisterComplete = ({ history }) => {
   const [email, setEmail] = useState("");
-  const { password, setPassword } = useState("");
+  const [password, setPassword] = useState("");
 
   useEffect(() => {
     setEmail(window.localStorage.getItem("emailForRegistration"));
@@ -12,12 +12,38 @@ const RegisterComplete = ({ history }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // validation
+    if (!email || !password) {
+      toast.error("Email and password is required");
+      return;
+    }
+
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 character long");
+      return;
+    }
+
     try {
       const result = await auth.signInWithEmailLink(
         email,
         window.location.href
       );
-    } catch (error) {}
+      if (result.user.emailVerified) {
+        // remove user email from local storage
+        window.localStorage.removeItem("emailForRegistration");
+        // get user id token
+        let user = auth.currentUser;
+        await user.updatePassword(password);
+        const idTokenResult = await user.getIdTokenResult();
+        // redux store
+        console.log("user", user, "idTokenResult", idTokenResult);
+        // redirect
+        history.push("/");
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
   };
 
   const completeRegistrationForm = () => (
