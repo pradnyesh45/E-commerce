@@ -9,7 +9,7 @@ import {
 } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import firebase from "firebase";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 
 const { SubMenu, Item } = Menu;
@@ -31,7 +31,7 @@ const Header = () => {
       type: "LOGOUT",
       payload: null,
     });
-    history.pushState("/login");
+    history.push("/login");
   };
 
   return (
